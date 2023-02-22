@@ -2,6 +2,8 @@
 #include<iostream>
 #include<bits/stdc++.h>
 #include<cmath>
+#include<random>
+#include<chrono>
 
 using namespace std;
 
@@ -64,13 +66,13 @@ class Card{
 // public:
 class Deck{
     vector<Card*> deck;
-    int suite, value;
+    int suit, value;
     public:
     void createDeck(){
         for(int i=0; i<52; i++){
-            suite = floor(i/13);
+            suit = floor(i/13);
             value = i%13+2;
-            deck.push_back(new Card(value, suite));
+            deck.push_back(new Card(value, suit));
         }
     }
 
@@ -80,10 +82,21 @@ class Deck{
             cout<<i->name();
         }
     }
+
+    public:
+    void shuffleDeck(){
+        mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+        for (int i = deck.size() - 1; i > 0; --i) {
+            uniform_int_distribution<int> dist(0, i);
+            int j = dist(rng);
+            swap(deck[i], deck[j]);
+    }
+    }
 };
 
 int main(){
     Deck* a = new Deck();
     a->createDeck();
+    a->shuffleDeck();
     a->printDeck();
 }
