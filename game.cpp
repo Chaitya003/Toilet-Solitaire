@@ -1,229 +1,203 @@
-#pragma once
+#include<stdio.h>
+#include<iostream>
+#include<bits/stdc++.h>
+#include<cmath>
+#include"card.h"
 
-#include <system/object.h>
-#include <cstdint>
+using namespace std;
 
-class Card : public System::Object
-{
-    typedef Card ThisType;
-    typedef System::Object BaseType;
-    
-    typedef ::System::BaseTypesInfo<BaseType> ThisTypeBaseTypesInfo;
-    RTTI_INFO_DECL();
-    
-public:
+class Game{
+    private:
+    int gameRule;
 
-    enum class Suits
-    {
-        Hearts = 0,
-        Diamonds,
-        Clubs,
-        Spades
-    };
-    
-    
-public:
+    public:
+    int selectGameRule(){
+        cout<<"Decide the Rule you want to play \n"
+        cout<<"1. Basic: 1st & 4th same Suit --> remove middle two, 1st & 4th same rank --> remove all 4"<<endl
+        cout<<"2. Intermediate: Neighbors are same rank --> remove pair"<<endl
+        cout<<"3. House Rule: 1st & 4th same Suit AND 3rd & 4th same rank --> remove last 3"<<endl
+        cin>>gameRule;
 
-    int32_t get_Value();
-    void set_Value(int32_t value);
-    Card::Suits get_Suit();
-    void set_Suit(Card::Suits value);
-    
-    Card();
-    
-protected:
-
-    #ifdef ASPOSE_GET_SHARED_MEMBERS
-    void GetSharedMembers(System::Object::shared_members_type& result) const override;
-    #endif
-    
-    
-private:
-
-    int32_t pr_Value;
-    Card::Suits pr_Suit;
-
-System::String name = System::String::Empty;
-    switch (Value)
-    {
-        case 14:
-            name = u"Ace";
-            break;
-        
-        case 13:
-            name = u"King";
-            break;
-        
-        case 12:
-            name = u"Queen";
-            break;
-        
-        case 11:
-            name = u"Jack";
-            break;
-        
-        default: 
-            name = Value->ToString();
-            break;
-        
+        return gameRule
     }
-    
-    return name;
-}
 
-System::String Card::get_Name()
-{
-    return get_NamedValue() + u" of  " + Suite->ToString();
-}
+    vector<Card*> removeCards(vector<Card*> deck, int[] numCards){
+        for(int i; i<sizeof(numCards); i++){
+            vector<Card*>::iterator removeCard;
+            removeCard = deck.begin() + numCards[i];
+            deck.erase(removeCard);
+        }
+        return deck;
+    }
 
-Card::Card(int32_t Value, System::SharedPtr<Suits> Suit)
-{
-    this->Value = Value;
-    this->Suit = Suit;
-}
+    vector<Card*> drawCards(vector<Card*> deck, vector<Card*> hand){
+        numDrawCards = 4 - hand.size();
+        for(int i=0; i<numDrawCards; i++){
+            hand.push_back(deck[i])
+        }
 
-{
-class String;
-} // namespace System
+        return hand;
+    }
 
-class Card : public System::Object
-{
-    typedef Card ThisType;
-    typedef System::Object BaseType;
-    
-    typedef ::System::BaseTypesInfo<BaseType> ThisTypeBaseTypesInfo;
-    RTTI_INFO_DECL();
-    
-public:
+    bool checkBasicRules(vector<Card*> deck, vector<Card*> hand, int nextMove){
+        if(nextMove==1){
+            suit_1 = hand[0]->name()[i->name().size()-1];
+            suit_4 = hand[hand.size()-1]->name()[i->name().size()-1];
+            if(suit_1==suit_4){
+                int[] numRemoveCards = {1, 2};
+                hand = removeCards(hand, numRemoveCards)
+                // vector<Card*>::iterator removeCard;
+                // removeCard = hand.begin() + 1;
+                // hand.erase(removeCard);
+                // removeCard = hand.begin() + 2;
+                // hand.erase(removeCard);
+                hand = drawCards(deck, hand);
+                int[] numRemoveCards = {0, 1};
+                deck = removeCards(deck, numRemoveCards)
+                // vector<Card*> newCard = deck[deck.size()-1]
+                // hand.push_back(newCard);
+                // removeCard = deck.begin()
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else if(nextMove==2){
+            rank_1 = hand[0]->name().substr(0, i->name().size()-1);
+            rank_4 = hand[hand.size()-1]->name().substr(0, i->name().size()-1);
+            if(rank_1==rank_4){
+                int[] numRemoveCards = {0, 1, 2, 3};
+                hand = removeCards(hand, numRemoveCards)
+                hand = drawCards(deck, hand);
+                int[] numRemoveCards = {0, 1, 2, 3};
+                deck = removeCards(deck, numRemoveCards)
 
-    System::String get_NamedValue();
-    System::String get_Name();
-    
-    Card(int32_t Value, System::SharedPtr<Suits> Suit);
-    
+                return true;  
+            }
+            else{
+                return false;
+            }
+        }
+
+        /* Draw a new card remaining*/
+    }
+
+    bool checkIntermediateRules(vector<Card*> deck, vector<Card*> hand, int nextMove){
+        if(nextMove==1){
+            checkBasicRules(deck, hand, nextMove);
+        }
+        else if(nextMove==2){
+            checkBasicRules(deck, hand, nextMove);
+        }
+
+        else if(nextMove==3){
+            int[] pairCards;
+            for(int i=0; i<hand.size()-1; i++){
+                flag=false;
+                if(hand[i]->name().substr(0, i->name().size()-1)==hand[i+1]->name().substr(0, i->name().size()-1)){
+                    flag=true;
+                    pairCards = {i, i+1}
+                    break;
+                }
+            }
+            if(flag){
+                int[] numRemoveCards = pairCards;
+                hand = removeCards(hand, numRemoveCards)
+                hand = drawCards(deck, hand);
+                int[] numRemoveCards = {0, 1};
+                deck = removeCards(deck, numRemoveCards)
+
+                return true;  
+            }
+            else{
+                return false;
+            }
+        }
+
+        /* Draw a new card remaining*/
+    }
+
+    bool checkHouseRules(vector<Card*> deck, vector<Card*> hand, int nextMove){
+        if(nextMove==1){
+            checkBasicRules(deck, hand, nextMove);
+        }
+        else if(nextMove==2){
+            checkBasicRules(deck, hand, nextMove);
+        }
+
+        else if(nextMove==3){
+            checkIntermediateRules(deck, hand, nextMove)
+        }
+
+        else if(nextMove==4){
+            suit_1 = hand[0]->name()[i->name().size()-1];
+            suit_4 = hand[hand.size()-1]->name()[i->name().size()-1];
+            rank_3 = hand[hand.size()-2]->name().substr(0, i->name().size()-1);
+            rank_4 = hand[hand.size()-1]->name().substr(0, i->name().size()-1);
+            if(suit_1==suit_4 && rank_3==rank_4){
+                int[] numRemoveCards = {0, 1, 2};
+                hand = removeCards(hand, numRemoveCards)
+                hand = drawCards(deck, hand);
+                int[] numRemoveCards = {0, 1, 2};
+                deck = removeCards(deck, numRemoveCards)
+
+                return true;  
+            }
+            else{
+                return false;
+            }
+        }
+
+        /* Draw a new card remaining*/
+    }
+
+    void displayMoves(){
+        int nextMove;
+
+        switch(gameRule){
+            case(1):
+            cout<<"1. Remove middle two cards";
+            cout<<"2. Remove all four cards";
+            cout<<"9. Draw a new card."
+            cin>>nextMove;
+            checkBasicRules(nextMove);
+            break;
+
+            case(2):
+            cout<<"1. Remove middle two cards";
+            cout<<"2. Remove all four cards";
+            cout<<"3. Remove neighbouring pair of cards with same rank."
+            cout<<"9. Draw a new card."
+            cin>>nextMove;
+            checkIntermediateRules(nextMove);
+            break;
+
+            case(3):
+            cout<<"1. Remove middle two cards";
+            cout<<"2. Remove all four cards";
+            cout<<"3. Remove pair of cards with same rank."
+            cout<<"4. Remove last 3 cards."
+            cout<<"9. Draw a new card."
+            cin>>nextMove;
+            checkHouseRules(nextMove);
+            break;
+
+            default:
+            cout<<"Select valid move";
+            displayMoves();
+            break;
+
+        }
+
+    }
+
 };
 
-
-
-
- //===============================================
-// ARTIFACT: code_snippet.cpp
-#include "code_snippet.h"
-
-RTTI_INFO_IMPL_HASH(1568579152u, ::Card, ThisTypeBaseTypesInfo);
-
-int32_t Card::get_Value()
-{
-    return pr_Value;
-}
-
-void Card::set_Value(int32_t value)
-{
-    pr_Value = value;
-}
-
-Card::Suits Card::get_Suit()
-{
-    return pr_Suit;
-}
-
-void Card::set_Suit(Card::Suits value)
-{
-    pr_Suit = value;
-}
-
-Card::Card() : pr_Value(0), pr_Suit(((Card::Suits)0))
-{
-}
-
-#ifdef ASPOSE_GET_SHARED_MEMBERS
-void Card::GetSharedMembers(System::Object::shared_members_type& result) const
-{
-    System::Object::GetSharedMembers(result);
-    
-    result.Add("Card::pr_Suit", this->pr_Suit);
-}
-#endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public string NamedValue
-    {
-        get
-        {
-            string name = string.Empty;
-            switch (Value)
-            {
-                case (14):
-                    name = "Ace";
-                    break;
-                case (13):
-                    name = "King";
-                    break;
-                case (12):
-                    name = "Queen";
-                    break;
-                case (11):
-                    name = "Jack";
-                    break;
-                default:
-                    name = Value.ToString();
-                    break;
-            }
-
-            return name;
-        }
-    }
-
-    public string Name
-    {
-        get
-        {
-            return NamedValue + " of  " + Suite.ToString();
-        }
-    }
-
-    public Card(int Value, Suits Suit)
-    {
-        this.Value = Value;
-        this.Suit = Suit;
-    }
-}
-
-public class Deck
-{
-    public List<Card> Cards = new List<Card>();
-    public void FillDeck()
-    {
-        public void FillDeck()
-        {
-            //Can use a single loop utilising the mod operator % and Math.Floor
-            //Using divition based on 13 cards in a suited
-            for (int i = 0; i < 52; i++)
-            {
-                Card.Suits suit = (Card.Suits)(Math.Floor((decimal)i / 13));
-                //Add 2 to value as a cards start a 2
-                int val = i % 13 + 2;
-                Cards.Add(new Card(val, suit));
-            }
-        }
-    }
-
-    public void PrintDeck()
-    {
-        foreach (Card card in this.Cards)
-        {
-            Console.WriteLine(card.Name);
-        }
-    }
+int main(){
+    Deck* newDeck = new Deck();
+    vector<Card*> deck;
+    deck = newDeck->createDeck();
+    deck = newDeck->shuffleDeck(deck);
+    newDeck->printDeck(deck);
 }

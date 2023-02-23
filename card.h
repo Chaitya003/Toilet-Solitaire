@@ -108,45 +108,19 @@ class Deck{
         return deck;
     }
 
-    public:
-    vector<Card*> removeCard(vector<Card*> deck, vector<Card*>::iterator removeCard){
-        deck.erase(removeCard);
+    // public:
+    // vector<Card*> removeCard(vector<Card*> deck, vector<Card*>::iterator removeCard){
+    //     deck.erase(removeCard);
 
-        return deck;
-    }
+    //     return deck;
+    // }
     
-    public:
-    tuple<vector<Card*>, vector<Card*> > drawCard(vector<Card*> hand, vector<Card*> newCard){
-        removeCard = deck.begin()+(deck.size()-1);
-        // hand.push_back(deck[deck.size()-1]);
-        hand.push_back(newCard);
+    // public:
+    // tuple<vector<Card*>, vector<Card*> > drawCard(vector<Card*> hand, vector<Card*> newCard){
+    //     removeCard = deck.begin()+(deck.size()-1);
+    //     // hand.push_back(deck[deck.size()-1]);
+    //     hand.push_back(newCard);
 
-        return make_tuple(hand, deck);
-    }
+    //     return make_tuple(hand, deck);
+    // }
 };
-
-int main(){
-    vector<Card*> b;
-    vector<Card*> d;
-    vector<Card*>::iterator c;
-    Deck* a = new Deck();
-    b = a->createDeck();
-    b = a->shuffleDeck(b);
-    d = a->shuffleDeck(b);
-    cout<<d[0]->name()<<endl;
-    a->printDeck(b);
-    cout<<endl;
-    c = b.begin()+1;
-    b.erase(c);
-    a->printDeck(b);
-    cout<<endl;
-    a->printDeck(d);
-    cout<<endl;
-    b.push_back(d[d.size()-1]);
-    a->printDeck(b);
-    cout<<endl;
-    auto [b, d] = a->drawCard(b, d);
-    // b = e[0];
-    // d = e[1];
-    a->printDeck(b);
-}
