@@ -11,17 +11,9 @@ class Game{
     private:
     int gameRule;
     int cnt;
-    // vector<Card*> deck, hand;
     
     public:
-    // vector<Card*> deck, hand;
     Deck* newDeck = new Deck();
-
-    // public:
-    // Game(vector<Card*> deck){
-    //     this->deck = deck;
-    // }
-
 
     public:
     int selectGameRule(){
@@ -37,6 +29,8 @@ class Game{
     vector<Card*> removeCards(vector<Card*> deck, vector<Card*> waste, int numCards[], bool flag=false){
         vector<Card*>::iterator removeCard;
         removeCard = deck.begin();
+        cout<<endl;
+        cout<<deck.size()<<"Deck Size"<<endl;
         if(flag){
             deck.erase(removeCard + (deck.size() - 4) + numCards[0], removeCard + (deck.size() - 4) + (numCards[1] + 1));
         }
@@ -54,10 +48,6 @@ class Game{
     }
 
     vector<Card*> drawCards(vector<Card*> deck, vector<Card*> hand, int numDrawCards){
-        // int numDrawCards = 4 - hand.size();
-        // cout<<hand.size()<<"Hand Size"<<endl;
-        // if(numDrawCards>0){
-        // cout<<deck.size()<<" Deck Size"<<endl;
         for(int i=0; i<numDrawCards; i++){
             if(!deck.empty()){
                 hand.push_back(deck[i]);
@@ -68,11 +58,7 @@ class Game{
                 rotate(hand.begin(), hand.begin()+1, hand.end());
             }
         }
-        // }
-        // else{
-        //     hand.push_back(deck[0]);
-        // }
-
+        
         return hand;
     }
 
@@ -111,7 +97,6 @@ class Game{
 
     void checkBasicRules(vector<Card*> deck, vector<Card*> hand, int nextMove){
         vector<Card*> waste;
-        cout<<nextMove<<"Next Move"<<endl;
         if(nextMove==1){
             char suit_1 = hand[hand.size()-4]->name()[hand[hand.size()-4]->name().size()-1];
             char suit_4 = hand[hand.size()-1]->name()[hand[hand.size()-1]->name().size()-1];
@@ -119,25 +104,13 @@ class Game{
                 cnt = 0;
                 int numRemoveCards[] = {1, 2};
                 hand = removeCards(hand, waste, numRemoveCards, true);
-                // vector<Card*>::iterator removeCard;
-                // removeCard = hand.begin() + 1;
-                // hand.erase(removeCard);
-                // removeCard = hand.begin() + 2;
-                // hand.erase(removeCard);
                 int numDrawCards = 2;
                 hand = drawCards(deck, hand, numDrawCards);
                 if(!deck.empty()){
                     int numRemoveCardsDeck[] = {0, 1};
                     deck = removeCards(deck, waste, numRemoveCardsDeck);
                 }
-                // else{
-                //     cout<<"Deck Empty";
-                // }
-                // vector<Card*> newCard = deck[deck.size()-1]
-                // hand.push_back(newCard);
-                // removeCard = deck.begin()
                 displayMoves(gameRule, deck, hand);
-                // return true;
             }
             else{
                 cout<<"Take valid move."<<endl;
@@ -157,11 +130,7 @@ class Game{
                     int numRemoveCardsDeck[] = {0, 3};  //{0, 1, 2, 3};
                     deck = removeCards(deck, waste, numRemoveCardsDeck);
                 }
-                // else{
-                //     cout<<"Deck Empty";
-                // }
                 displayMoves(gameRule, deck, hand);
-                // return true;  
             }
             else{
                 cout<<"Take valid move."<<endl;
@@ -196,11 +165,9 @@ class Game{
         vector<Card*> waste;
         if(nextMove==1){
             checkBasicRules(deck, hand, nextMove);
-            // return ans;
         }
         else if(nextMove==2){
             checkBasicRules(deck, hand, nextMove);
-            // return ans;
         }
 
         else if(nextMove==3){
@@ -260,16 +227,13 @@ class Game{
         vector<Card*> waste;
         if(nextMove==1){
             checkBasicRules(deck, hand, nextMove);
-            // return ans;
         }
         else if(nextMove==2){
             checkBasicRules(deck, hand, nextMove);
-            // return ans;
         }
 
         else if(nextMove==3){
             checkIntermediateRules(deck, hand, nextMove);
-            // return ans;
         }
 
         else if(nextMove==4){
@@ -279,12 +243,12 @@ class Game{
             string rank_4 = hand[hand.size()-1]->name().substr(0, hand[hand.size()-1]->name().size()-1);
             if(suit_1==suit_4 && rank_3==rank_4){
                 cnt = 0;
-                int numRemoveCards[] = {1, 3};  //{0, 1, 2, 3}; int numRemoveCards[] = {0, 1, 2};
+                int numRemoveCards[] = {1, 3};
                 hand = removeCards(hand, waste, numRemoveCards, true);
                 int numDrawCards = 3;
                 hand = drawCards(deck, hand, numDrawCards);
                 if(!deck.empty()){
-                    int numRemoveCardsDeck[] = {0, 2}; //int numRemoveCardsDeck[] = {0, 1, 2};
+                    int numRemoveCardsDeck[] = {0, 2};
                     deck = removeCards(deck, waste, numRemoveCardsDeck);
                 }
 
@@ -303,12 +267,12 @@ class Game{
             string rank_2 = hand[hand.size()-3]->name().substr(0, hand[hand.size()-1]->name().size()-1);
             if(suit_1==suit_4 && rank_1==rank_2){
                 cnt = 0;
-                int numRemoveCards[] = {0, 2};  //{0, 1, 2, 3}; int numRemoveCards[] = {0, 1, 2};
+                int numRemoveCards[] = {0, 2};
                 hand = removeCards(hand, waste, numRemoveCards, true);
                 int numDrawCards = 3;
                 hand = drawCards(deck, hand, numDrawCards);
                 if(!deck.empty()){
-                    int numRemoveCardsDeck[] = {0, 2}; //int numRemoveCardsDeck[] = {0, 1, 2};
+                    int numRemoveCardsDeck[] = {0, 2};
                     deck = removeCards(deck, waste, numRemoveCardsDeck);
                 }
 
@@ -354,16 +318,12 @@ class Game{
             cout<<"Your Hand: ";
             printHand(hand);
             cout<<endl;
-            newDeck->printDeck(hand);
-            cout<<endl;
-            newDeck->printDeck(deck);
             cout<<endl;
         }
         else{
             cout<<"Your Hand: ";
             printHand(hand);
             cout<<endl;
-            newDeck->printDeck(hand);
             cout<<endl;
         }
 
@@ -419,24 +379,11 @@ int main(){
     deck = newDeck->createDeck();
     deck = newDeck->shuffleDeck(deck);
     int cnt=0;
-    newDeck->printDeck(deck);
+    // newDeck->printDeck(deck);
     cout<<endl;
     Game* newGame = new Game();
 
     while(true){
-        // cout<<gameRule<<endl;
-        // if(hand.empty()){
-        //     hand = newGame->drawCards(deck, hand);
-        //     int numRemoveCards[] = {0, 1, 2, 3};
-        // cout<<"Your Hand: ";
-        // }
-        // hand = newGame->drawCards(deck, hand);
-        // newDeck->printDeck(hand);
-        // cout<<endl;
-        // int numRemoveCards[] = {0, 1, 2, 3};
-        // deck = newGame->removeCards(deck, waste, numRemoveCards);
-        // newDeck->printDeck(deck);
-        // cout<<endl;
         deck = newDeck->shuffleDeck(deck);
         if(cnt==0){
             cnt+=1;
