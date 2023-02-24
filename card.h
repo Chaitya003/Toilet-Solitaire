@@ -88,13 +88,13 @@ class Deck{
 
     public:
     void printDeck(vector<Card*> deck){
-        int cnt=0;
+        // int cnt=0;
         for(auto i: deck){
             cout<<i->name()<<',';
             // cout<<i->name()[i->name().size()-1]<<',';
-            cnt+=1;
+            // cnt+=1;
         }
-        cout<<cnt;
+        // cout<<cnt;
     }
 
     public:
