@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<iostream>
-#include<bits/stdc++.h>
+// #include<bits/stdc++.h>
 #include<vector>
 #include<cmath>
 #include"card.h"
@@ -30,7 +30,7 @@ class Game{
         vector<Card*>::iterator removeCard;
         removeCard = deck.begin();
         cout<<endl;
-        cout<<deck.size()<<"Deck Size"<<endl;
+        // cout<<deck.size()<<"Deck Size"<<endl;
         if(flag){
             deck.erase(removeCard + (deck.size() - 4) + numCards[0], removeCard + (deck.size() - 4) + (numCards[1] + 1));
         }
